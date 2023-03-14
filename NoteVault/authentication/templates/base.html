@@ -1,0 +1,74 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>NoteVault</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'authentication/css/style.css' %}">
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <h1>NoteVault</h1>
+        <div class="menu-toggle-container">
+        <button id="show-menu-btn">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+        </div>
+        <nav id="menu">
+          <ul>
+            {% if request.user.is_authenticated %}
+            <li><a href={% url 'home' %}>Home</a></li>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Contact</a></li>
+            {% comment %} <li><a href={% url 'logout_user' %}>Logout</a></li> {% endcomment %}
+            {% else %}
+            <li><a href={% url 'login_user' %}>Login</a></li>
+            <li><a href={% url 'register_user' %}>Register</a></li>
+            {% endif %}
+          </ul>
+        </nav>
+      </div>
+      <script>
+        window.addEventListener('resize', function() {
+          var header = document.querySelector('header');
+          var showMenuBtn = document.getElementById('show-menu-btn');
+          var menu = document.getElementById('menu');
+          if (window.innerWidth < 768) {
+            header.classList.remove('expanded');
+            header.classList.add('collapsed');
+            showMenuBtn.style.display = 'block';
+            menu.style.display = 'none';
+          } else {
+            header.classList.remove('collapsed');
+            header.classList.add('expanded');
+            showMenuBtn.style.display = 'none';
+            menu.style.display = 'block';
+          }
+        });
+        document.getElementById('show-menu-btn').addEventListener('click', function() {
+          var menu = document.getElementById('menu');
+          if (menu.style.display === 'block') {
+            menu.style.display = 'none';
+          } else {
+            menu.style.display = 'block';
+          }
+        });
+      </script>
+    </header>
+    <div class="fixed-container container">
+        <div class="content-wrap">
+      {% block main %}
+      {% endblock %}
+    </div>
+</div>
+    <footer>
+      <div class="footer-content">
+        <p>&copy; 2023 NoteVault. All rights reserved.</p>
+      </div>
+    </footer>
+  </body>
+</html>
